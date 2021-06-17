@@ -12,31 +12,33 @@ namespace Backtracking_Sudoku
          * Dit zorgt er dus voor dat er minder vertakkingen zijn, dit betekend dat moeilijkere en grotere sudokus sneller opgelost worden. Het kan echter wel zo zijn dat deze methode iets langzamer is bij
          * makkelijkere sudoku's, dit komt omdat er extra complexiteit komt kijken bij het analyseren van het probleem.
          */
-        public Backtracking_FC()
+        public Backtracking_FC()        //dit is de constructor methode voor het backtracking met forward check algorithme
         {
         }
 
         public bool Algorithm(SudokuFC sud, Sudoku sudoku)
         {
-            /*
-             * 
+            /*Dit algorithme werkt bijna hetzelfde als het algorithme van gewoon backtracking. Het verschil tussen de twee is dat het gewone backtracking algorithme op elke plek alle getallen van
+             *1 t/m 9 gaat proberen in te vullen, het algorithme met forward checking heeft vooraf een check voor restricties, komt het getal 1 al voor in de box, dan gaat hier niet op gecheckt worden.
+             *Komt het getal 3 al voor in de rij, dan gaat hier niet op gecheckt worden, en komt het getal 5 al voor in de kolom, ook dan wordt hier niet op gecheckt. Dit zorgt ervoor dat het algorithme
+             *minder staten hoeft te onderzoeken, en dus dat het algorithme, in ieder geval op grotere en lastigere sudoku's, sneller werkt.
              */
             Tuple<int, int> possud = Find_Zeros(sudoku);
-            if(possud == null)
+            if(possud == null)              //we kijken of er nog een 0 in de sudoku zit, zodra dat niet meer het geval is dan termineren we, omdat de sudoku is opgelost
             {
                 return true;
             }
-            for (int i = 0; i < sud.sudokugrid[possud.Item1, possud.Item2].Count; i++)
+            for (int i = 0; i < sud.sudokugrid[possud.Item1, possud.Item2].Count; i++)      //we loopen hier over alle mogelijkheden in de lijst van een bepaalde cell heen, dit wordt zoals in de opdracht beschreven van links naar rechts, van onder naar boven gedaan.
             {
-                int value = sud.sudokugrid[possud.Item1, possud.Item2][i];
-                if(Check(sudoku, value, possud))
+                int value = sud.sudokugrid[possud.Item1, possud.Item2][i];      //we maken even een variabele aan voor deze waarde.
+                if(Check(sudoku, value, possud))                                //we checken of deze variabele nog ingevuld mag worden, ivm met andere waarden die zijn ingevuld
                 {
-                    sudoku.sudokugrid[possud.Item1, possud.Item2] = value;
-                    if(Algorithm(sud, sudoku))
+                    sudoku.sudokugrid[possud.Item1, possud.Item2] = value;      //De cell in de sudoku wordt aangepast naar het nummer dat is uitgekozen uit de lijst.
+                    if(Algorithm(sud, sudoku))                                  //recursieve aanroep
                     {
                         return true;
                     }
-                    sudoku.sudokugrid[possud.Item1, possud.Item2] = 0;
+                    sudoku.sudokugrid[possud.Item1, possud.Item2] = 0;          //als er een fout is gemaakt zetten we de waarde terug en proberen het op een andere manier
                 }
             }
 
@@ -45,6 +47,10 @@ namespace Backtracking_Sudoku
 
         public void Constraint(SudokuFC sud)
         {
+            /*Met het vullen van de SudokuFC wordt elke niet gegeven cell gevuld met de cijfers 1 t/m 9, in deze fucntie wordt er over heel de sudoku gelooped
+             *wanneer wij een lijst tegenkomen die maar 1 element, dan weten we dat deze al is gegeven door de sudoku, heeft dan loopen wij door zijn rij, kolom en block heen
+             *en verwijderen we deze uit de lijst met mogelijkheden voor die cell.  
+             */
             //check hier alle rijen, kolommen en blokken zodat de cijfers die het sowieso niet kunnen zijn uit de juiste lijsten gehaald kunnen worden.
             for (int i = 0; i < 9; i++)
             {
@@ -69,9 +75,9 @@ namespace Backtracking_Sudoku
                             }
                         }
                         //verwijderd cijfers in de blokken, omdat deze al een keer eerder in de blokken zijn voorgekomen
-                        for (int rowx = (j / 3) * 3; rowx < (j / 3) * 3 + 3; rowx++)                                  //wiskundige representatie om te kijken over welke rij blokken het gaat, en daarna de eerstvolgende 3 te pakken.
+                        for (int rowx = (j / 3) * 3; rowx < (j / 3) * 3 + 3; rowx++)                                  
                         {
-                            for (int colomy = (i / 3) * 3; colomy < (i / 3) * 3 + 3; colomy++)                              //wiskundige representatie om te kijken over welke kolom blokken het gaat, en daarvan de eerstvolgende 3 te pakken.
+                            for (int colomy = (i / 3) * 3; colomy < (i / 3) * 3 + 3; colomy++)                              
                             {
                                 if (sud.sudokugrid[rowx, colomy].Count > 1)
                                 {

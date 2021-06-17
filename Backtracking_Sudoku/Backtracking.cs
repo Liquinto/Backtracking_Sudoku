@@ -18,6 +18,10 @@ namespace Backtracking_Sudoku
 
         public Tuple<int, int> Find_Zeros(Sudoku sud)   //de sudoku moet meegegeven worden aan deze functie, zodat de eerst volgende 0 gevonden kan worden.
         {
+            /*
+             * Deze functie kijkt wanneer de eerste 0 wordt gevonden, dit doet hij van links naar rechts en van boven naar onder zoals in de opdracht staat beschreven, 
+             * Als de eerste 0 wordt gevonden wordt de locatie in een tuple teruggegeven door de functie
+             */
             for(int i = 0; i < 9; i++)                  //de sudoku wordt van links naar rechts, en van boven naar onder doorgelopen zoals in de opdracht beschreven staat.
             {
                 for (int j = 0; j < 9; j++)             
@@ -33,6 +37,9 @@ namespace Backtracking_Sudoku
 
         public bool Check(Sudoku sud, int value, Tuple<int,int> position)
         {
+            /*Deze functie is bedoeld om te kijken of het cijfer dat ingevuld moet worden ingevuld mag worden op die plek.
+             * 
+             */
             for (int i = 0; i < 9; i++)
             {
                 //check rij
@@ -69,6 +76,9 @@ namespace Backtracking_Sudoku
 
         public bool Algorithm(Sudoku sud)
         {
+            /*Hier is het backtracking algorithme, wat de sudoku gaat oplossen.
+             *Het algorithme werkt recursief.
+             */
             Tuple<int, int> pos = Find_Zeros(sud);              //de positie van de eerst volgende 0 wordt gevonden, als er geen nullen meer zijn wordt pos null
             if (pos == null)                                    //als pos null is betekend dit dat de sudoku is opgelost, dit is dus de base case
             {
