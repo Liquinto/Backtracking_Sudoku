@@ -34,12 +34,12 @@ namespace Backtracking_Sudoku
                 if(Check(sudoku, value, possud))                                //we checken of deze variabele nog ingevuld mag worden, ivm met andere waarden die zijn ingevuld
                 {
                     sudoku.sudokugrid[possud.Item1, possud.Item2] = value;      //De cell in de sudoku wordt aangepast naar het nummer dat is uitgekozen uit de lijst.
-                    AddConstraint(possud, sud, value);
+                    AddConstraint(possud, sud, value);                          //De value wordt uit de lijst gehaald met cijfers zodat deze niet toegevoegd kunnen gaan worden aan toekomstige cellen in dezelfde rij, kolom of blok.
                     if (Algorithm(sud, sudoku))                                  //recursieve aanroep
                     {
                         return true;
                     }
-                    RemoveConstraint(possud, sud, value);
+                    RemoveConstraint(possud, sud, value);                       //als er een fout is gemaakt moeten de verwijderde cijfers uit de lijsten weer teruggezet worden, dat gebeurt hier.
                     sudoku.sudokugrid[possud.Item1, possud.Item2] = 0;          //als er een fout is gemaakt zetten we de waarde terug en proberen het op een andere manier
                    
                 }
@@ -96,7 +96,10 @@ namespace Backtracking_Sudoku
 
         public void AddConstraint(Tuple<int,int> position, SudokuFC sud, int value)
         {
-            //het ingevulde cijfer moet van de lijsten van de cellen in de rij, kolom en blok gehaald worden
+            /*
+             * Hier is een functie die ervoor zorgt dat zodra er een cijfer wordt toegevoegd aan de sudoku door het programma, dat deze ook uit de lijst van de SudokuFC wordt gehaald.
+             * Dit zorgt er dus voor dat de zoekruimte beperkt wordt, maar er komt wel extra complexiteit bij het analyseren van het probleem.
+             */
             int posx = position.Item1;
             int posy = position.Item2;
 
@@ -147,14 +150,17 @@ namespace Backtracking_Sudoku
         }
         public void RemoveConstraint(Tuple<int,int> position, SudokuFC sud, int value)
         {
-            //het ingevulde cijfer moet van de lijsten van de cellen in de rij, kolom en blok gehaald worden
+            /*
+             * Hier is een functie die ervoor zorgt zodra we op een dood-einde zitten van een pad, en we dus moeten backtracken, dat de getallen weer in de juiste lijst komen te staan
+             * als dit namelijk niet wordt gedaan wordt het domein niet hersteld, en zal er dus geen oplossing gevonden worden.
+             */
             int posx = position.Item1;
             int posy = position.Item2;
 
 
-            if (sud.sudokugrid[posx, posy].Count > 0 && sud.sudokugrid[posx, posy][sud.sudokugrid[posx, posy].Count - 1] != 0)              //hier nog comments
+            if (sud.sudokugrid[posx, posy].Count > 0 && sud.sudokugrid[posx, posy][sud.sudokugrid[posx, posy].Count - 1] != 0)              
             {
-                //verwijderd cijfers in de rij
+                //voegt cijfers toe in de rij
                 for (int row = 0; row < 9; row++)
                 {
                     if (sud.sudokugrid[posx, row].Count > 0 && sud.sudokugrid[posx, row][sud.sudokugrid[posx, row].Count - 1] != 0)
@@ -165,7 +171,7 @@ namespace Backtracking_Sudoku
                         }
                     }
                 }
-                //verwijderd cijfers in de kolom
+                //voegt cijfers toe in de kolom
                 for (int colom = 0; colom < 9; colom++)
                 {
                     if (sud.sudokugrid[colom, posy].Count > 0 && sud.sudokugrid[colom, posy][sud.sudokugrid[colom, posy].Count - 1] != 0)
@@ -178,7 +184,7 @@ namespace Backtracking_Sudoku
                 }
 
 
-                //verwijderd cijfers in het blok
+                //voegt cijfers in het blok toe
                 for (int rowx = (position.Item2 / 3) * 3; rowx < (position.Item2 / 3) * 3 + 3; rowx++)
                 {
                     for (int colomy = (position.Item1 / 3) * 3; colomy < (position.Item1 / 3) * 3 + 3; colomy++)
