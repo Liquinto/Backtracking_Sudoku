@@ -39,7 +39,7 @@ namespace Backtracking_Sudoku
                     {
                         return true;
                     }
-                    RemoveConstraint(possud, sud, sudoku.sudokugrid[possud.Item1, possud.Item2]);
+                    RemoveConstraint(possud, sud, value);
                     sudoku.sudokugrid[possud.Item1, possud.Item2] = 0;          //als er een fout is gemaakt zetten we de waarde terug en proberen het op een andere manier
                    
                 }
@@ -161,7 +161,7 @@ namespace Backtracking_Sudoku
                     {
                         if (!sud.sudokugrid[posx, row].Contains(value))
                         {
-                            sud.sudokugrid[posx, row].Insert(0,value);
+                            sud.sudokugrid[posx, row].Insert(sud.sudokugrid[posx, row].Count - 2, value);
                         }
                     }
                 }
@@ -172,7 +172,7 @@ namespace Backtracking_Sudoku
                     {
                         if (!sud.sudokugrid[colom, posy].Contains(value))
                         {
-                            sud.sudokugrid[colom, posy].Insert(0,value);
+                            sud.sudokugrid[colom, posy].Insert(sud.sudokugrid[colom, posy].Count - 2, value);
                         }
                     }
                 }
@@ -187,7 +187,7 @@ namespace Backtracking_Sudoku
                         {
                             if (!sud.sudokugrid[rowx, colomy].Contains(value))
                             {
-                                sud.sudokugrid[rowx, colomy].Insert(0,value);
+                                sud.sudokugrid[rowx, colomy].Insert(sud.sudokugrid[rowx, colomy].Count - 2, value);
                             }
                         }
                     }
