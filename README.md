@@ -1,4 +1,5 @@
-Backtracking_Sudoku README
+#Backtracking_Sudoku README
+
 This is a sudoku solver that uses both backtracking, as backtracking with forward checking. This assignment was made for the class Computationele Intelligentie at Utrecht University, for which the exact assignment has been uploaded as well.
 
 The sudoku solver works with both backtracking and backtracking with forward checking. To use the right format the sudoku has to be filled in as a long string, that can, but doesn't have to contain, spaces. Blank spaces should be represented by zero's.
