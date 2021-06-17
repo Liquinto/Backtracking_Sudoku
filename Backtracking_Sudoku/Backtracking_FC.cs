@@ -152,7 +152,7 @@ namespace Backtracking_Sudoku
             int posy = position.Item2;
 
 
-            if (sud.sudokugrid[posx, posy].Count > 0 && sud.sudokugrid[posx, posy][sud.sudokugrid[posx, posy].Count - 1] != 0)
+            if (sud.sudokugrid[posx, posy].Count > 0 && sud.sudokugrid[posx, posy][sud.sudokugrid[posx, posy].Count - 1] != 0)              //hier nog comments
             {
                 //verwijderd cijfers in de rij
                 for (int row = 0; row < 9; row++)
