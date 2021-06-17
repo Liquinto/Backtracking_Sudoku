@@ -34,11 +34,14 @@ namespace Backtracking_Sudoku
                 if(Check(sudoku, value, possud))                                //we checken of deze variabele nog ingevuld mag worden, ivm met andere waarden die zijn ingevuld
                 {
                     sudoku.sudokugrid[possud.Item1, possud.Item2] = value;      //De cell in de sudoku wordt aangepast naar het nummer dat is uitgekozen uit de lijst.
-                    if(Algorithm(sud, sudoku))                                  //recursieve aanroep
+                    AddConstraint(possud, sud, value);
+                    if (Algorithm(sud, sudoku))                                  //recursieve aanroep
                     {
                         return true;
                     }
+                    RemoveConstraint(possud, sud, sudoku.sudokugrid[possud.Item1, possud.Item2]);
                     sudoku.sudokugrid[possud.Item1, possud.Item2] = 0;          //als er een fout is gemaakt zetten we de waarde terug en proberen het op een andere manier
+                   
                 }
             }
 
@@ -56,12 +59,12 @@ namespace Backtracking_Sudoku
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    if (sud.sudokugrid[i, j].Count == 1)
+                    if (sud.sudokugrid[i, j][sud.sudokugrid[i, j].Count - 1] != 0)
                     {
                         //verwijderd cijfers die sowieso niet in een rij voor kunnen komen, omdat ze al eerder in de rij voorkomen
                         for (int row = 0; row < 9; row++)
                         {
-                            if (sud.sudokugrid[i, row].Count > 1)
+                            if (sud.sudokugrid[i, row].Count > 0 && sud.sudokugrid[i, row][sud.sudokugrid[i, row].Count - 1] != 0)
                             {
                                 sud.sudokugrid[i, row].Remove(sud.sudokugrid[i, j][0]);
                             }
@@ -69,7 +72,7 @@ namespace Backtracking_Sudoku
                         //verwijderd cijfers die sowieso niet in een kolom kunnen voorkomen omdat ze al eerder in de kolom voorkomen
                         for (int colom = 0; colom < 9; colom++)
                         {
-                            if (sud.sudokugrid[colom, j].Count > 1)
+                            if (sud.sudokugrid[colom, j].Count > 0 && sud.sudokugrid[colom, j][sud.sudokugrid[colom, j].Count - 1] != 0)
                             {
                                 sud.sudokugrid[colom, j].Remove(sud.sudokugrid[i, j][0]);
                             }
@@ -79,7 +82,7 @@ namespace Backtracking_Sudoku
                         {
                             for (int colomy = (i / 3) * 3; colomy < (i / 3) * 3 + 3; colomy++)                              
                             {
-                                if (sud.sudokugrid[rowx, colomy].Count > 1)
+                                if (sud.sudokugrid[rowx, colomy].Count > 0 && sud.sudokugrid[rowx, colomy][sud.sudokugrid[rowx, colomy].Count - 1] != 0)
                                 {
                                     sud.sudokugrid[rowx, colomy].Remove(sud.sudokugrid[i, j][0]);
                                 }
@@ -91,7 +94,105 @@ namespace Backtracking_Sudoku
 
         }
 
+        public void AddConstraint(Tuple<int,int> position, SudokuFC sud, int value)
+        {
+            //het ingevulde cijfer moet van de lijsten van de cellen in de rij, kolom en blok gehaald worden
+            int posx = position.Item1;
+            int posy = position.Item2;
+
+ 
+            if (sud.sudokugrid[posx, posy].Count > 0 && sud.sudokugrid[posx, posy][sud.sudokugrid[posx, posy].Count - 1] != 0)
+            {
+                //verwijderd cijfers in de rij
+                for(int row = 0; row < 9; row++)
+                {
+                    if(sud.sudokugrid[posx, row].Count > 0 && sud.sudokugrid[posx,row][sud.sudokugrid[posx, row].Count - 1] != 0)
+                    {
+                        if (!sud.sudokugrid[posx, row].Contains(value))
+                        {
+                            sud.sudokugrid[posx, row].Remove(value);
+                        }
+                    }
+                }
+                //verwijderd cijfers in de kolom
+                for(int colom = 0; colom < 9; colom++)
+                {
+                    if(sud.sudokugrid[colom, posy].Count > 0 && sud.sudokugrid[colom, posy][sud.sudokugrid[colom, posy].Count - 1] != 0)
+                    {
+                        if (!sud.sudokugrid[colom, posy].Contains(value))
+                        {
+                            sud.sudokugrid[colom, posy].Remove(value);
+                        }
+                    }
+                }
+
+                
+                //verwijderd cijfers in het blok
+                for (int rowx = (position.Item2 / 3) * 3; rowx < (position.Item2 / 3) * 3 + 3; rowx++)
+                {
+                    for (int colomy = (position.Item1 / 3) * 3; colomy < (position.Item1 / 3) * 3 + 3; colomy++)
+                    {
+                        if (sud.sudokugrid[rowx, colomy].Count > 0 && sud.sudokugrid[rowx, colomy][sud.sudokugrid[rowx, colomy].Count - 1] != 0)
+                        {
+                            if (!sud.sudokugrid[rowx, colomy].Contains(value))
+                            {
+                                sud.sudokugrid[rowx, colomy].Remove(value);
+                            }
+                        }
+                    }
+                }
+            }
+          
+
+        }
+        public void RemoveConstraint(Tuple<int,int> position, SudokuFC sud, int value)
+        {
+            //het ingevulde cijfer moet van de lijsten van de cellen in de rij, kolom en blok gehaald worden
+            int posx = position.Item1;
+            int posy = position.Item2;
 
 
+            if (sud.sudokugrid[posx, posy].Count > 0 && sud.sudokugrid[posx, posy][sud.sudokugrid[posx, posy].Count - 1] != 0)
+            {
+                //verwijderd cijfers in de rij
+                for (int row = 0; row < 9; row++)
+                {
+                    if (sud.sudokugrid[posx, row].Count > 0 && sud.sudokugrid[posx, row][sud.sudokugrid[posx, row].Count - 1] != 0)
+                    {
+                        if (!sud.sudokugrid[posx, row].Contains(value))
+                        {
+                            sud.sudokugrid[posx, row].Insert(0,value);
+                        }
+                    }
+                }
+                //verwijderd cijfers in de kolom
+                for (int colom = 0; colom < 9; colom++)
+                {
+                    if (sud.sudokugrid[colom, posy].Count > 0 && sud.sudokugrid[colom, posy][sud.sudokugrid[colom, posy].Count - 1] != 0)
+                    {
+                        if (!sud.sudokugrid[colom, posy].Contains(value))
+                        {
+                            sud.sudokugrid[colom, posy].Insert(0,value);
+                        }
+                    }
+                }
+
+
+                //verwijderd cijfers in het blok
+                for (int rowx = (position.Item2 / 3) * 3; rowx < (position.Item2 / 3) * 3 + 3; rowx++)
+                {
+                    for (int colomy = (position.Item1 / 3) * 3; colomy < (position.Item1 / 3) * 3 + 3; colomy++)
+                    {
+                        if (sud.sudokugrid[rowx, colomy].Count > 0 && sud.sudokugrid[rowx, colomy][sud.sudokugrid[rowx, colomy].Count - 1] != 0)
+                        {
+                            if (!sud.sudokugrid[rowx, colomy].Contains(value))
+                            {
+                                sud.sudokugrid[rowx, colomy].Insert(0,value);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

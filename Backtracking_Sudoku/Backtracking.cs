@@ -61,11 +61,11 @@ namespace Backtracking_Sudoku
             int block_y = position.Item1 / 3;
 
             //check block
-            for(int i = block_y * 3; i < block_y * 3 + 3; i++)                                  //wiskundige representatie om te kijken over welke rij blokken het gaat, en daarna de eerstvolgende 3 te pakken.
+            for (int i = block_y * 3; i < block_y * 3 + 3; i++)                                  //wiskundige representatie om te kijken over welke rij blokken het gaat, en daarna de eerstvolgende 3 te pakken.
             {
-                for(int j = block_x * 3; j < block_x * 3 + 3; j++)                              //wiskundige representatie om te kijken over welke kolom blokken het gaat, en daarvan de eerstvolgende 3 te pakken.
+                for (int j = block_x * 3; j < block_x * 3 + 3; j++)                              //wiskundige representatie om te kijken over welke kolom blokken het gaat, en daarvan de eerstvolgende 3 te pakken.
                 {
-                    if(sud.sudokugrid[i,j] == value && new Tuple<int,int>(i,j) != position)     //slaagt zodra de value al in het block te vinden is, zonder zijn eigen positie mee te rekenen.
+                    if (sud.sudokugrid[i, j] == value && new Tuple<int, int>(i, j) != position)     //slaagt zodra de value al in het block te vinden is, zonder zijn eigen positie mee te rekenen.
                     {
                         return false;                                                           //als aan bovenstaande waarde wordt voldaan returned hij false omdat het niet geldig is het getal hier neer te zetten.
                     }

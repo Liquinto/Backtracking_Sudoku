@@ -40,7 +40,8 @@ namespace Backtracking_Sudoku
                     //als het getal niet 0 is, wordt alleen dit getal aan de lijst toegevoegd van de desbetreffende cell
                     if (Convert.ToInt32(charArr[counter].ToString()) != 0)
                     {
-                        sudokugrid[i, j].Add(Convert.ToInt32(charArr[counter].ToString()));            
+                        sudokugrid[i, j].Add(Convert.ToInt32(charArr[counter].ToString()));
+                        sudokugrid[i, j].Add(0);
                     }
                     //als het getal 0 is gaat de lijst hier gevuld worden met de cijfers 1 t/m 9
                     else
