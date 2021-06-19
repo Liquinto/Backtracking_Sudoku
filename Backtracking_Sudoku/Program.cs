@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Backtracking_Sudoku
 {
@@ -12,15 +13,21 @@ namespace Backtracking_Sudoku
              */
             Console.Write("Type in 1 for backtrack, and 2 for backtracking with forward check. Then press enter, and enter your sudoku: ");
             string choice = Console.ReadLine();
+            Stopwatch stopwatch = new Stopwatch();
 
-            if(choice == "1")
+            if (choice == "1")
             {
+                stopwatch.Start();
                 Backtrack();
+                stopwatch.Stop();
             }
             if(choice == "2")
             {
+                stopwatch.Start();
                 BacktrackFC();
+                stopwatch.Stop();
             }
+            Console.WriteLine("The time it took to solve the sudoku was: " + stopwatch.Elapsed + " seconds");
         }
 
         public static void Backtrack()
